@@ -11,6 +11,7 @@ public class GameLevel : MonoBehaviour
     private bool canCheck = true;
     public void Start()
     {
+        canCheck = true;
         foreach (Transform tr in parentListObj)
         {
             gameObjects.Add(tr.gameObject);

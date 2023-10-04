@@ -13,6 +13,7 @@ public class GameManager : MonoBehaviour
 
     private int currentIndex;
     [SerializeField] List<GameObject> particleVFXs;
+    public bool isStartGame = false;
 
 
     private bool canDrag = true;
@@ -27,6 +28,7 @@ public class GameManager : MonoBehaviour
 
         levels[currentIndex].gameObject.SetActive(true);
         canDrag = true;
+        isStartGame = true;
     }
 
     public int GetCurrentIndex()
@@ -36,11 +38,16 @@ public class GameManager : MonoBehaviour
 
     public void CheckLevelUp()
     {
-        canDrag = false;
-        GameObject explosion = Instantiate(particleVFXs[Random.Range(0,particleVFXs.Count)], transform.position, transform.rotation);
-        Destroy(explosion, .75f);
-        currentIndex += 1;
-        StartCoroutine(LevelUp());
+        if (isStartGame)
+        {
+            canDrag = false;
+            isStartGame = false;
+            selectedObject = null;
+            GameObject explosion = Instantiate(particleVFXs[Random.Range(0,particleVFXs.Count)], transform.position, transform.rotation);
+            Destroy(explosion, .75f);
+            currentIndex += 1;
+            StartCoroutine(LevelUp());
+        }
     }
     
     IEnumerator LevelUp()
@@ -50,12 +57,19 @@ public class GameManager : MonoBehaviour
         if (currentIndex == 3)
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-
             currentIndex = 0;
+            canDrag = true;
+            isStartGame = true;
+        }
+        else
+        {
+            levels[currentIndex].gameObject.SetActive(true);
+            canDrag = true;
+            isStartGame = true;
         }
 
-        levels[currentIndex].gameObject.SetActive(true);
-        canDrag = true;
+        
+        
     }
     
     
